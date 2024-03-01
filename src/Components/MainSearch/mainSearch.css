@@ -1,0 +1,11 @@
+.main-search {
+  display: block;
+  margin: 20px auto;
+  background-color: var(--component-background);
+  font-size: var(--base-font-size);
+  padding: 10px 20px;
+  border-radius: var(--base-border-radius);
+  max-width: 800px;
+  width: 100%;
+  border: 0;
+}

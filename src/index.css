@@ -49,3 +49,58 @@ table {
 
 /* Above is CSS reset */
 /* <-----------------------------------------------------------------------------------------------------------> */
+
+:root {
+	--primary: #FFF;
+	--component-background: #F9F9F9;
+	--secondary: #FFFFFFCC;
+	--button: #B9E2E6;
+	--header: #000000;
+	--placeholder: #474747;
+	--danger: #EE3F19;
+	--success: #21C206;
+	--text: #373737;
+	--border: #333333;
+	--page-background: #ECEDED;
+	--base-border-radius: 10px;
+	--base-transition-duration: 0.1s;
+	--base-font-size: 16px;
+}
+
+* {
+	font-size: var(--base-font-size);
+	font-family: "Space Grotesk", sans-serif !important;
+	box-sizing: border-box !important;
+}
+
+body {
+	background-color: var(--page-background);
+	padding: 20px 10px;
+}
+
+.prompt {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0,0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.prompt .prompt-box {
+	background-color: var(--primary);
+	padding: 25px;
+	border-radius: var(--base-border-radius);
+}
+
+.prompt .prompt-box .prompt-box-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 10px;
+	border-bottom: 1px solid gray;
+	font-size: 25px;
+}
