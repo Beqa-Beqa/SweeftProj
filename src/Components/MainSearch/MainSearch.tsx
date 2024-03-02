@@ -4,15 +4,13 @@ import { MainContext } from "../../Contexts/MainContextProvider";
 import { fetchSearchImages } from "../../Functions";
 
 const MainSearch = (props: {
-  search: string,
-  setSearch: React.Dispatch<React.SetStateAction<string>>,
   setShowSearchResults: React.Dispatch<React.SetStateAction<{
     show: boolean;
     search: string;
-  }>> 
+  }>>,
+  setTotal: React.Dispatch<React.SetStateAction<number>>
 }) => {
-  const {search, setSearch} = props;
-  const {history, setHistory, searchedImagesData, setSearchedImagesData} = useContext(MainContext);
+  const {history, setHistory, searchedImagesData, setSearchedImagesData, search, setSearch} = useContext(MainContext);
 
   const handleSubmit = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if(event.code === "Enter") {
@@ -23,11 +21,11 @@ const MainSearch = (props: {
       const existsData = searchedImagesData.filter((data: SearchedImageData) => data.searchKey === search);
 
       if(!existsData.length) {
-        await fetchSearchImages(searchedImagesData, setSearchedImagesData, search);
+        const res = await fetchSearchImages(searchedImagesData, setSearchedImagesData, search);
+        props.setTotal(res.total);
       }
       
       props.setShowSearchResults({show: true, search})
-      setSearch("");
     }
   }
 

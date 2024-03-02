@@ -90,6 +90,15 @@ body {
 	justify-content: center;
 }
 
+.prompt .prompt-image-container {
+	display: flex;
+	flex-flow: row;
+	gap: 1rem;
+	max-width: 90vw;
+	max-height: 90vh;
+	height: 100%;
+}
+
 .prompt .prompt-box {
 	background-color: var(--primary);
 	padding: 25px;
@@ -103,4 +112,17 @@ body {
 	padding-bottom: 10px;
 	border-bottom: 1px solid gray;
 	font-size: 25px;
+}
+
+
+.open-image {
+  border-radius: var(--base-border-radius);
+  height: 100%;
+  margin-bottom: 15px;
+}
+
+@media screen and (max-width: 768px) {
+	.prompt .prompt-image-container {
+		flex-flow: column;
+	}
 }

@@ -25,5 +25,5 @@ export const fetchSearchImages = async (curData: SearchedImageData[], setData: R
   const newData = [...curData, ...modifiedData];
   window.localStorage.setItem("photo-gallery-searched-images-data", JSON.stringify(newData));
   setData(newData);
-  return data;
+  return {result: data.results, total: data.total};
 }
