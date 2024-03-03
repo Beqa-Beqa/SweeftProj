@@ -13,7 +13,7 @@ const Main = (props: {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   loading: boolean
 }) => {
-  const {images, setImages, imagesStatistics, setImagesStatistics, searchedImagesData, setSearchedImagesData, search, setSearch} = useContext(MainContext);
+  const {filteredImages, setImages, imagesStatistics, setImagesStatistics, filteredSearchedImagesData, setSearchedImagesData, search, setSearch} = useContext(MainContext);
   const {mainPage, setMainPage, loading, setLoading, searchPage, setSearchPage} = props;
 
   const [showSearchResults, setShowSearchResults] = useState<{show: boolean, search: string}>({show: false, search: ""});
@@ -25,7 +25,7 @@ const Main = (props: {
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
-      await fetchImages(images, setImages, mainPage);
+      await fetchImages(filteredImages, setImages, mainPage);
       setLoading(false);
     }
 
@@ -36,12 +36,12 @@ const Main = (props: {
   const searchObserver = newObserver();
   const searchLastImageRef = lastImageRef(searchObserver, loading, setSearchPage);
   useEffect(() => {
-    const searchedImages = searchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search);
+    const searchedImages = filteredSearchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search);
 
     const fetch = async () => {
       if(total > searchedImages.length) {
         setLoading(true);
-        await fetchSearchImages(searchedImagesData, setSearchedImagesData, search, searchPage);
+        await fetchSearchImages(filteredSearchedImagesData, setSearchedImagesData, search, searchPage);
         setLoading(false);
       }
     }
@@ -67,9 +67,9 @@ const Main = (props: {
         <MainSearch setTotal={setTotal} setShowSearchResults={setShowSearchResults} />
         <div className="main-images-container">
           {!showSearchResults.show ?
-            images.length &&
-                images.map((image: ImageInitialData, index: number) => {
-                  if(index + 1 === images.length) {
+            filteredImages.length &&
+                filteredImages.map((image: ImageInitialData, index: number) => {
+                  if(index + 1 === filteredImages.length) {
                     return <div onClick={() => handleImageClick(image)} ref={mainLastImageRef} key={index} className="image-container">
                       <img src={image.urls.regular} alt="random image"/>
                     </div>
@@ -83,8 +83,8 @@ const Main = (props: {
             <div className="search-results">
               <span className="cancel-button" onClick={() => {setShowSearchResults({show: false, search: ""}); setSearch(""); setTotal(0)}}>Cancel X</span>
               <div className="main-images-container">
-                {searchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search).map((data: SearchedImageData, index: number) => {
-                  if(index + 1 === searchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search).length) {
+                {filteredSearchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search).map((data: SearchedImageData, index: number) => {
+                  if(index + 1 === filteredSearchedImagesData.filter((data: SearchedImageData) => data.searchKey === showSearchResults.search).length) {
                     return <div ref={searchLastImageRef} key={data.id} onClick={() => handleImageClick(data)} className="image-container">
                       <img src={data.urls.regular} alt="searched image" />
                     </div>

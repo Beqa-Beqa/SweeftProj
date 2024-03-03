@@ -1,26 +1,26 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const MainContext = createContext<{
-  images: ImageInitialData[],
+  filteredImages: ImageInitialData[],
   setImages: React.Dispatch<React.SetStateAction<ImageInitialData[]>>,
   imagesStatistics: ImageStatistics[],
   setImagesStatistics: React.Dispatch<React.SetStateAction<ImageStatistics[]>>,
-  searchedImagesData: SearchedImageData[],
+  filteredSearchedImagesData: SearchedImageData[],
   setSearchedImagesData: React.Dispatch<React.SetStateAction<SearchedImageData[]>>,
   search: string,
   setSearch: React.Dispatch<React.SetStateAction<string>>,
-  history: string[],
+  filteredHistory: string[],
   setHistory:  React.Dispatch<React.SetStateAction<string[]>>
 }>({
-  images: [],
+  filteredImages: [],
   setImages: () => {},
   imagesStatistics: [],
   setImagesStatistics: () => {},
-  searchedImagesData: [],
+  filteredSearchedImagesData: [],
   setSearchedImagesData: () => {},
   search: "",
   setSearch: () => {},
-  history: [],
+  filteredHistory: [],
   setHistory: () => {}
 });
 
@@ -31,7 +31,17 @@ const MainContextProvider = (props: {children: React.ReactNode}) => {
   const [history, setHistory] = useState<string[]>(JSON.parse(window.localStorage.getItem("photo-gallery-history") || "[]"));
   const [search, setSearch] = useState<string>("");
 
-  return <MainContext.Provider value={{images, setImages, imagesStatistics, setImagesStatistics, searchedImagesData, setSearchedImagesData, search, setSearch, history, setHistory}}>
+  const [filteredImages, setFilteredImages] = useState<ImageInitialData[]>([]);
+  const [filteredSearchedImagesData, setFilteredSearchedImagesData] = useState<SearchedImageData[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilteredImages(Array.from(new Set(images)));
+    setFilteredSearchedImagesData(Array.from(new Set(searchedImagesData)));
+    setFilteredHistory(Array.from(new Set(history)));
+  }, [images, searchedImagesData, history]);
+
+  return <MainContext.Provider value={{filteredImages, setImages, imagesStatistics, setImagesStatistics, filteredSearchedImagesData, setSearchedImagesData, search, setSearch, filteredHistory, setHistory}}>
     {props.children}
   </MainContext.Provider>
 }

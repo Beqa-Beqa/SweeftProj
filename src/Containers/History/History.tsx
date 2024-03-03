@@ -11,8 +11,7 @@ const History = (props: {
   loading: boolean,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const {history, searchedImagesData, setSearchedImagesData, imagesStatistics, setImagesStatistics} = useContext(MainContext);
-  const filteredHistoryKeys = Array.from(new Set(history));
+  const {filteredHistory, filteredSearchedImagesData, setSearchedImagesData, imagesStatistics, setImagesStatistics} = useContext(MainContext);
 
   const [showImages, setShowImages] = useState<{show: boolean, searchKey: string}>({show: false, searchKey: ""});
 
@@ -23,7 +22,7 @@ const History = (props: {
   useEffect(() => {
     const fetch = async () => {
       props.setLoading(true);
-      await fetchSearchImages(searchedImagesData, setSearchedImagesData, showImages.searchKey, props.historyPage)
+      await fetchSearchImages(filteredSearchedImagesData, setSearchedImagesData, showImages.searchKey, props.historyPage)
       props.setLoading(false);
     }
 
@@ -44,8 +43,8 @@ const History = (props: {
     <>
       {!showImages.show ? 
         <div className="history-word-buttons">
-          {history.length ? 
-            filteredHistoryKeys.map((searchKey: string, key: number) => {
+          {filteredHistory.length ? 
+            filteredHistory.map((searchKey: string, key: number) => {
               return <span onClick={() => setShowImages({show: true, searchKey})} key={key}>{searchKey}</span>
             })
           : null}
@@ -54,8 +53,8 @@ const History = (props: {
         <div style={{display: "flex", flexFlow: "column", alignItems: "center"}}>
           <span style={{fontSize: 30, cursor: "pointer", marginBottom: 20}} onClick={() => setShowImages({show: false, searchKey: ""})} >Cancel X</span>
           <div className="main-images-container">
-            {searchedImagesData.filter((imageData: SearchedImageData) => imageData.searchKey === showImages.searchKey).map((data: ImageInitialData, index: number) => {
-              if(index + 1 === searchedImagesData.filter((imageData: SearchedImageData) => imageData.searchKey === showImages.searchKey).length) {
+            {filteredSearchedImagesData.filter((imageData: SearchedImageData) => imageData.searchKey === showImages.searchKey).map((data: ImageInitialData, index: number) => {
+              if(index + 1 === filteredSearchedImagesData.filter((imageData: SearchedImageData) => imageData.searchKey === showImages.searchKey).length) {
                 return <div onClick={() => handleImageClick(data)} ref={historyLastImageRef} className="image-container" key={index}>
                   <img src={data.urls.regular} alt="previously searched image" />
                 </div>

@@ -10,18 +10,18 @@ const MainSearch = (props: {
   }>>,
   setTotal: React.Dispatch<React.SetStateAction<number>>
 }) => {
-  const {history, setHistory, searchedImagesData, setSearchedImagesData, search, setSearch} = useContext(MainContext);
+  const {filteredHistory, setHistory, filteredSearchedImagesData, setSearchedImagesData, search, setSearch} = useContext(MainContext);
 
   const handleSubmit = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if(event.code === "Enter") {
-      const newHistory = [search, ...history];
+      const newHistory = [search, ...filteredHistory];
       setHistory(newHistory);
       window.localStorage.setItem("photo-gallery-history", JSON.stringify(newHistory));
       
-      const existsData = searchedImagesData.filter((data: SearchedImageData) => data.searchKey === search);
+      const existsData = filteredSearchedImagesData.filter((data: SearchedImageData) => data.searchKey === search);
 
       if(!existsData.length) {
-        const res = await fetchSearchImages(searchedImagesData, setSearchedImagesData, search);
+        const res = await fetchSearchImages(filteredSearchedImagesData, setSearchedImagesData, search);
         props.setTotal(res.total);
       }
       
